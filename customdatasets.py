@@ -41,7 +41,7 @@ class SegmentationDataSet(data.Dataset):
             input_ID = self.inputs[index]
             target_ID = self.targets[index]
 
-            x, y = imread(input_ID), rgb2gray(imread(target_ID))
+            x, y = imread(input_ID), rgb2gray(imread(target_ID)<255)
 
         if self.transform is not None:
             x, y = self.transform(x, y)

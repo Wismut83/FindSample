@@ -15,8 +15,8 @@ import math
 from libraryNaN import images_dir
 
 size = (1024, 1024)
-inputs = images_dir('Photo/img4/')
-targets = images_dir('Photo/mask4/')
+inputs = images_dir('Photo/learn/2class/img/')
+targets = images_dir('Photo/learn/2class/mask/')
 
 # training transformations and augmentations
 transforms_training = Compose([
@@ -76,7 +76,7 @@ dataloader_validation = DataLoader(dataset=dataset_valid,
 device = torch.device('cuda')
 
 model = UNet(in_channels=3,
-             out_channels=4,
+             out_channels=2,
              n_blocks=6,
              start_filters=16,
              activation='relu',
@@ -89,9 +89,9 @@ model = UNet(in_channels=3,
 print(f'train ({len(dataset_train.inputs)}): {dataset_train.inputs}')
 print(f'valid ({len(dataset_valid.inputs)}): {dataset_valid.inputs}')
 
-model_name_one = 'Models/{}/{}.pt'.format('data0312', '6photo_ic3_oc4_nb6_sf16_bs2_ol1-2')
-model_weights = torch.load(pathlib.Path.cwd() / model_name_one)
-model.load_state_dict(model_weights)
+# model_name_one = 'Models/{}/{}.pt'.format('data0326', '45photo_ic3_oc2_nb6_sf16_bs2')
+# model_weights = torch.load(pathlib.Path.cwd() / model_name_one)
+# model.load_state_dict(model_weights)
 
 epochs = 300
 
@@ -119,7 +119,7 @@ trainer = Trainer(model=model,
                   notebook=False)
 
 training_losses, validation_losses, lr_rates = trainer.run_trainer()
-model_name = 'Models/{}/{}.pt'.format('data0312', '6photo_ic3_oc4_nb6_sf16_bs2_ol1-3')
+model_name = 'Models/{}/{}.pt'.format('data0326', '45photo_ic3_oc2_nb6_sf16_bs2')
 torch.save(model.state_dict(), pathlib.Path.cwd() / model_name)
 
 from lr_rate_finder import LearningRateFinder

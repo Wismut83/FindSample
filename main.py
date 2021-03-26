@@ -20,7 +20,7 @@ targets = images_dir('Photo/mask4/')
 
 # training transformations and augmentations
 transforms_training = Compose([
-    Resize(input_size=size+(3,), target_size=(size)),
+    Resize(input_size=size + (3,), target_size=(size)),
     AlbuSeg2d(albu=albumentations.HorizontalFlip(p=0.5)),
     # AlbuSeg2d(albu=albumentations.Rotate(p=0.5, limit=4)),
     AlbuSeg2d(albu=albumentations.VerticalFlip(p=0.5)),
@@ -29,18 +29,17 @@ transforms_training = Compose([
     AlbuSeg2d(albu=albumentations.ShiftScaleRotate(p=0.5,
                                                    rotate_limit=3,
                                                    shift_limit=0.03,
-                                                   scale_limit=0.03,)),
+                                                   scale_limit=0.03, )),
     DenseTarget(),
     MoveAxis(),
     Normalize01()
 ])
 
 transforms_validation = Compose([
-    Resize(input_size=size+(3,), target_size=(size)),
+    Resize(input_size=size + (3,), target_size=(size)),
     DenseTarget(),
     MoveAxis(),
     Normalize01()])
-
 
 random_seed = 1337
 
@@ -58,22 +57,17 @@ targets_train, targets_valid = train_test_split(
     train_size=train_size,
     shuffle=True)
 
-
-
 dataset_train = SegmentationDataSet(inputs=inputs_train,
                                     targets=targets_train,
                                     transform=transforms_training)
-
 
 dataset_valid = SegmentationDataSet(inputs=inputs_valid,
                                     targets=targets_valid,
                                     transform=transforms_validation)
 
-
 dataloader_training = DataLoader(dataset=dataset_train,
                                  batch_size=2,
                                  shuffle=True)
-
 
 dataloader_validation = DataLoader(dataset=dataset_valid,
                                    batch_size=2,
@@ -95,15 +89,14 @@ model = UNet(in_channels=3,
 print(f'train ({len(dataset_train.inputs)}): {dataset_train.inputs}')
 print(f'valid ({len(dataset_valid.inputs)}): {dataset_valid.inputs}')
 
-model_name_one = 'Models/{}/{}.pt'.format('data0312','6photo_ic3_oc4_nb6_sf16_bs2_ol1-2')
+model_name_one = 'Models/{}/{}.pt'.format('data0312', '6photo_ic3_oc4_nb6_sf16_bs2_ol1-2')
 model_weights = torch.load(pathlib.Path.cwd() / model_name_one)
 model.load_state_dict(model_weights)
 
 epochs = 300
 
 criterion = torch.nn.CrossEntropyLoss()
-optimizer = torch.optim.AdamW(model.parameters(), lr=0.00004) #0.0002
-
+optimizer = torch.optim.AdamW(model.parameters(), lr=0.00004)  # 0.0002
 
 # lambda1 = lambda epoch: epoch // 30
 # lambda2 = lambda epoch: 0.95 ** epoch
@@ -112,7 +105,7 @@ optimizer = torch.optim.AdamW(model.parameters(), lr=0.00004) #0.0002
 # lambda5 = lambda epoch: abs(math.asin(math.sin((epoch-math.pi*40/2)/(epochs/10)))/(0.5*math.pi))*(epochs-epoch)/epochs
 # scheduler = torch.optim.lr_scheduler.LambdaLR(optimizer, lr_lambda=lambda5)
 # (cos(pi*x*2)+1)*(10-x)/10
-scheduler = torch.optim.lr_scheduler.CosineAnnealingLR(optimizer, epochs//6, eta_min=0)
+scheduler = torch.optim.lr_scheduler.CosineAnnealingLR(optimizer, epochs // 6, eta_min=0)
 
 trainer = Trainer(model=model,
                   device=device,
@@ -125,16 +118,17 @@ trainer = Trainer(model=model,
                   epoch=0,
                   notebook=False)
 
-
 training_losses, validation_losses, lr_rates = trainer.run_trainer()
-model_name =  'Models/{}/{}.pt'.format('data0312','6photo_ic3_oc4_nb6_sf16_bs2_ol1-3')
+model_name = 'Models/{}/{}.pt'.format('data0312', '6photo_ic3_oc4_nb6_sf16_bs2_ol1-3')
 torch.save(model.state_dict(), pathlib.Path.cwd() / model_name)
 
 from lr_rate_finder import LearningRateFinder
+
 lrf = LearningRateFinder(model, criterion, optimizer, device)
 lrf.fit(dataloader_training, steps=100)
 lrf.plot()
 
 from visual import plot_training
+
 fig = plot_training(training_losses, validation_losses, lr_rates, gaussian=False, sigma=1, figsize=(10, 4))
 plt.show()

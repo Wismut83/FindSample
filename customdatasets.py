@@ -19,7 +19,7 @@ class SegmentationDataSet(data.Dataset):
         self.inputs = inputs
         self.targets = targets
         self.transform = transform
-        self.inputs_dtype = torch.long
+        self.inputs_dtype = torch.float32
         self.targets_dtype = torch.long
         self.use_cache = use_cache
         self.pre_transform = pre_transform

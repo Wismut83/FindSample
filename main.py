@@ -82,7 +82,7 @@ model = UNet(in_channels=3,
              activation='relu',
              normalization='batch',
              conv_mode='same',
-             dim=2).cuda()
+             dim=2).to(device)
 
 # summary(model, ((3,)+size))
 
@@ -96,7 +96,7 @@ print(f'valid ({len(dataset_valid.inputs)}): {dataset_valid.inputs}')
 epochs = 300
 
 criterion = torch.nn.CrossEntropyLoss()
-optimizer = torch.optim.AdamW(model.parameters(), lr=0.00004)  # 0.0002
+optimizer = torch.optim.AdamW(model.parameters(), lr=0.000003)  # 0.0002
 
 # lambda1 = lambda epoch: epoch // 30
 # lambda2 = lambda epoch: 0.95 ** epoch

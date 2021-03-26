@@ -1,0 +1,32 @@
+02.03.2020
+result 1
+model = UNet(in_channels=3,
+             out_channels=4,
+             n_blocks=6,
+             start_filters=4,
+             activation='relu',
+             normalization='batch',
+             conv_mode='same',
+             dim=2).cuda()
+optimizer = torch.optim.Adam(model.parameters(), lr=0.003, weight_decay=0.0001)
+
+result 2
+model_name =  'Models/{}/{}.pt'.format('data0301','32photo_ic3_oc4_nb6_sf4_bs2_4')
+size = (256, 256)
+model = UNet(in_channels=3,
+             out_channels=4,
+             n_blocks=6,
+             start_filters=4,
+             activation='relu',
+             normalization='batch',
+             conv_mode='same',
+             dim=2).cuda()
+optimizer = torch.optim.Adam(model.parameters(), lr=0.003, weight_decay=0.0001)
+lambda5 = lambda epoch: abs(math.asin(math.sin((epoch-math.pi*40/2)/(epochs/10)))/(0.5*math.pi))*(epochs-epoch)/epochs
+scheduler = torch.optim.lr_scheduler.LambdaLR(optimizer, lr_lambda=lambda5)
+
+
+
+
+
+

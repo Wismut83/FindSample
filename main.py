@@ -78,7 +78,7 @@ device = torch.device('cuda')
 model = UNet(in_channels=3,
              out_channels=2,
              n_blocks=6,
-             start_filters=16,
+             start_filters=8,
              activation='relu',
              normalization='batch',
              conv_mode='same',
@@ -96,7 +96,7 @@ print(f'valid ({len(dataset_valid.inputs)}): {dataset_valid.inputs}')
 epochs = 300
 
 criterion = torch.nn.CrossEntropyLoss()
-optimizer = torch.optim.AdamW(model.parameters(), lr=0.000003)  # 0.0002
+optimizer = torch.optim.AdamW(model.parameters(), lr=0.000004)  # 0.0002
 
 # lambda1 = lambda epoch: epoch // 30
 # lambda2 = lambda epoch: 0.95 ** epoch
@@ -119,7 +119,7 @@ trainer = Trainer(model=model,
                   notebook=False)
 
 training_losses, validation_losses, lr_rates = trainer.run_trainer()
-model_name = 'Models/{}/{}.pt'.format('data0326', '45photo_ic3_oc2_nb6_sf16_bs2')
+model_name = 'Models/{}/{}.pt'.format('data0326', '45photo_ic3_oc2_nb6_sf8_bs2')
 torch.save(model.state_dict(), pathlib.Path.cwd() / model_name)
 
 from lr_rate_finder import LearningRateFinder

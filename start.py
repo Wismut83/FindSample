@@ -48,16 +48,16 @@ device = torch.device('cuda')
 
 # model
 model = UNet(in_channels=3,
-             out_channels=4,
+             out_channels=2,
              n_blocks=6,
-             start_filters=16,
+             start_filters=8,
              activation='relu',
              normalization='batch',
              conv_mode='same',
              dim=2).to(device)
 
 
-model_name ='Models/{}/{}.pt'.format('data0312','6photo_ic3_oc4_nb6_sf16_bs2_ol1-3')
+model_name = 'Models/{}/{}.pt'.format('data0326', '45photo_ic3_oc2_nb6_sf8_bs2_4')
 model_weights = torch.load(pathlib.Path.cwd() / model_name)
 model.load_state_dict(model_weights)
 

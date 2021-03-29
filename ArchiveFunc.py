@@ -55,11 +55,15 @@ class detect_angle_skeleton():
                 return x_next, y_next
             else:
                 continue
-#
-# from libraryNaN import images_dir
-# from skimage.io import imread, imsave
-# import os
-# path = 'Photo/learn/2class/mask/'
-# images = images_dir(path)
-# for i, img  in enumerate(images):
-#     imsave(path+os.path.splitext(os.listdir(path)[i])[0]+'.png',imread(img)>200)
+
+def generate2class():
+    from libraryNaN import images_dir
+    from skimage.io import imread, imsave
+    import os
+    path_input = 'Photo/learn/2class/mask/'
+    images = images_dir(path_input)
+    for i, img  in enumerate(images):
+        imsave(path_input+os.path.splitext(os.listdir(path_input)[i])[0]+'.png',imread(img)>200)
+
+if __name__ == '__main__':
+    generate2class()

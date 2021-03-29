@@ -89,14 +89,14 @@ model = UNet(in_channels=3,
 print(f'train ({len(dataset_train.inputs)}): {dataset_train.inputs}')
 print(f'valid ({len(dataset_valid.inputs)}): {dataset_valid.inputs}')
 
-model_name_one = 'Models/{}/{}.pt'.format('data0326', '45photo_ic3_oc2_nb6_sf8_bs2_4')
+model_name_one = 'Models/{}/{}.pt'.format('data0326', '45photo_ic3_oc2_nb6_sf8_bs2')
 model_weights = torch.load(pathlib.Path.cwd() / model_name_one)
 model.load_state_dict(model_weights)
 
 epochs = 400
 
 criterion = torch.nn.CrossEntropyLoss()
-optimizer = torch.optim.AdamW(model.parameters(), lr=0.00001)  # 0.0002
+optimizer = torch.optim.AdamW(model.parameters(), lr=0.0001)  # 0.0002
 
 # lambda1 = lambda epoch: epoch // 30
 # lambda2 = lambda epoch: 0.95 ** epoch
@@ -119,7 +119,7 @@ trainer = Trainer(model=model,
                   notebook=False)
 
 training_losses, validation_losses, lr_rates = trainer.run_trainer()
-model_name = 'Models/{}/{}.pt'.format('data0326', '45photo_ic3_oc2_nb6_sf8_bs2_5')
+model_name = 'Models/{}/{}.pt'.format('data0326', '56photo_ic3_oc2_nb6_sf8_bs2_2')
 torch.save(model.state_dict(), pathlib.Path.cwd() / model_name)
 
 from lr_rate_finder import LearningRateFinder

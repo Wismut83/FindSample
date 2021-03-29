@@ -57,7 +57,7 @@ model = UNet(in_channels=3,
              dim=2).to(device)
 
 
-model_name = 'Models/{}/{}.pt'.format('data0326', '45photo_ic3_oc2_nb6_sf8_bs2_4')
+model_name = 'Models/{}/{}.pt'.format('data0326', '56photo_ic3_oc2_nb6_sf8_bs2_3')
 model_weights = torch.load(pathlib.Path.cwd() / model_name)
 model.load_state_dict(model_weights)
 

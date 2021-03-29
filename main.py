@@ -41,7 +41,7 @@ transforms_validation = Compose([
     MoveAxis(),
     Normalize01()])
 
-random_seed = 13742
+random_seed = 1377
 
 train_size = 0.8
 
@@ -89,14 +89,14 @@ model = UNet(in_channels=3,
 print(f'train ({len(dataset_train.inputs)}): {dataset_train.inputs}')
 print(f'valid ({len(dataset_valid.inputs)}): {dataset_valid.inputs}')
 
-model_name_one = 'Models/{}/{}.pt'.format('data0326', '45photo_ic3_oc2_nb6_sf8_bs2')
+model_name_one = 'Models/{}/{}.pt'.format('data0326', '56photo_ic3_oc2_nb6_sf8_bs2_2')
 model_weights = torch.load(pathlib.Path.cwd() / model_name_one)
 model.load_state_dict(model_weights)
 
-epochs = 400
+epochs = 50
 
 criterion = torch.nn.CrossEntropyLoss()
-optimizer = torch.optim.AdamW(model.parameters(), lr=0.0001)  # 0.0002
+optimizer = torch.optim.AdamW(model.parameters(), lr=0.00001)  # 0.0002
 
 # lambda1 = lambda epoch: epoch // 30
 # lambda2 = lambda epoch: 0.95 ** epoch
@@ -105,7 +105,7 @@ optimizer = torch.optim.AdamW(model.parameters(), lr=0.0001)  # 0.0002
 # lambda5 = lambda epoch: abs(math.asin(math.sin((epoch-math.pi*40/2)/(epochs/10)))/(0.5*math.pi))*(epochs-epoch)/epochs
 # scheduler = torch.optim.lr_scheduler.LambdaLR(optimizer, lr_lambda=lambda5)
 # (cos(pi*x*2)+1)*(10-x)/10
-scheduler = torch.optim.lr_scheduler.CosineAnnealingLR(optimizer, epochs // 4, eta_min=0)
+scheduler = torch.optim.lr_scheduler.CosineAnnealingLR(optimizer, epochs // 5, eta_min=0)
 
 trainer = Trainer(model=model,
                   device=device,
@@ -119,14 +119,14 @@ trainer = Trainer(model=model,
                   notebook=False)
 
 training_losses, validation_losses, lr_rates = trainer.run_trainer()
-model_name = 'Models/{}/{}.pt'.format('data0326', '56photo_ic3_oc2_nb6_sf8_bs2_2')
+model_name = 'Models/{}/{}.pt'.format('data0326', '56photo_ic3_oc2_nb6_sf8_bs2_3')
 torch.save(model.state_dict(), pathlib.Path.cwd() / model_name)
 
 from lr_rate_finder import LearningRateFinder
 
-lrf = LearningRateFinder(model, criterion, optimizer, device)
-lrf.fit(dataloader_training, steps=100)
-lrf.plot()
+# lrf = LearningRateFinder(model, criterion, optimizer, device)
+# lrf.fit(dataloader_training, steps=100)
+# lrf.plot()
 
 from visual import plot_training
 

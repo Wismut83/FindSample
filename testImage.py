@@ -6,8 +6,8 @@ from skimage.io import imread, imsave
 from libraryNaN import images_dir, renumerate
 
 size = (512, 512)
-input_path = 'Photo/learn/4class/img/'
-target_path = 'Photo/learn/4class/mask/'
+input_path = 'Photo/test/img/'
+target_path = 'Photo/test/mask/'
 inputs1 = images_dir(input_path)
 targets1 = images_dir(target_path)
 

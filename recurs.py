@@ -9,8 +9,8 @@ a = speed_test()
 
 photo_number = 3
 images = images_dir('Photo/test/mask/')
-image_n, max_class = renumerate(imread(images[photo_number]), max=True)
-image = renumerate(rotate(image_n, detect_angle_measure(image_n, max_class, image_n.shape[0]), mode='edge', order=0))
+image_n, max_class = renumerate(imread(images[photo_number]), max=True, inver=True)
+image = renumerate(rotate(image_n, detect_angle_measure(image_n, image_n.shape[0], max_class), mode='edge', order=0))
 
 start, end = (test_image(image, max_class))
 

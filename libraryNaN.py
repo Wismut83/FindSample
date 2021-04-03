@@ -49,7 +49,7 @@ def weighted_avarage_angle(regions):
         return -angle
 
 
-def detect_angle_measure(img, max_class, max_area):
+def detect_angle_measure(img, max_area, max_class):
     from skimage import measure
     label_img = measure.label(img < max_class)
     regions = measure.regionprops(label_img)
@@ -59,7 +59,10 @@ def detect_angle_measure(img, max_class, max_area):
     return weighted_avarage_angle(try_regions)
 
 
-def renumerate(image, max=False):
+def renumerate(image, max=False, inver=None):
+    from skimage import util
+    if inver is not None:
+        image = util.invert(image)
     image = rgb2gray(image)
     classes = np.unique(image)
     dummy = np.zeros_like(image)

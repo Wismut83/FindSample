@@ -4,6 +4,7 @@ import numpy as np
 import torch
 from skimage.io import imread, imsave
 from skimage.transform import resize
+from skimage import util
 import os
 from inference import predict
 from transformations import normalize_01, re_normalize
@@ -78,6 +79,7 @@ def postprocess(img: torch.tensor):
     img = img.cpu().numpy()
     img = np.squeeze(img)
     img = re_normalize(img)
+    # img = util.invert(img)
     return img
 
 

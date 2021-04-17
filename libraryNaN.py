@@ -3,6 +3,7 @@ import numpy as np
 import time
 
 
+
 def rgb2gray(rgb, r=0.3, g=0.4, b=0.3):
     try:
         r_k, g_k, b_k = rgb[:, :, 0], rgb[:, :, 1], rgb[:, :, 2]
@@ -42,7 +43,7 @@ def weighted_avarage_angle(regions):
         wx += props.area * abs(math.tan(props.orientation))
         w += props.area
     angle = 90 - math.degrees(math.atan(wx / w))
-    print('angle: ', angle)
+    # print('angle: ', angle)
     if minus >= 0:
         return angle
     else:
@@ -58,6 +59,19 @@ def detect_angle_measure(img, max_area, max_class):
     #     print(math.degrees(props.orientation))
     return weighted_avarage_angle(try_regions)
 
+def minmax_y(img,max_area,max_class):
+    from skimage import measure
+    label_img = measure.label(img < max_class)
+    regions = measure.regionprops(label_img)
+    try_regions = [x for x in regions if x.area > max_area]
+    y_min, y_max = 999999, 0
+    for prop in try_regions:
+        x1, y1, x2, y2 = prop.bbox
+        if y1<y_min:
+            y_min=y1
+        if y2>y_max:
+            y_max=y2
+    return y_min, y_max
 
 def renumerate(image, max=False, inver=None):
     from skimage import util
@@ -87,7 +101,7 @@ def test_mask_line(line, white, index=0, part=0.05, test_result=0):
     return False
 
 
-def test_image(image, max_class):
+def image_axis(image, max_class):
     last, start, end = False, [], []
     for i in range(0, len(image), 1):
         line_bool = test_mask_line(image[i], max_class)
@@ -98,8 +112,20 @@ def test_image(image, max_class):
         last = line_bool
     if len(start) != len(end):
         raise ValueError("Списки 'start' и 'end' разной длины")
-    return start, end
+    for i, line in enumerate(start):
+        start[i] = [line+(end[i]-line)/2, line, end[i], end[i]-line]
+    return start
 
+def axis_min_max(axis, img):
+
+    for i in range(0,len(axis)):
+        start, end, stop = 0, len(img[0]), False
+        while stop == False:
+            pass
+
+def save_list_img(target_path, name, file):
+    from skimage.io import imsave
+    imsave(target_path + name + '.png', file)
 
 class speed_test():
     def __init__(self):
